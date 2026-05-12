@@ -156,43 +156,38 @@ downloadButton.addEventListener('click', () => {
 
 })
 
+// ---- Исправленный ripple-эффект ----
 const rippleElements =
   document.querySelectorAll('.ripple')
 
 rippleElements.forEach((element) => {
-
   element.addEventListener('click', function (e) {
-
-    const circle =
-      document.createElement('span')
-
-    const diameter = Math.max(
-      this.clientWidth,
-      this.clientHeight
-    )
-
-    const radius = diameter / 2
-
-    circle.style.width = `${diameter}px`
-    circle.style.height = `${diameter}px`
-
-    circle.style.left =
-      `${e.clientX - this.offsetLeft - radius}px`
-
-    circle.style.top =
-      `${e.clientY - this.offsetTop - radius}px`
-
-    circle.classList.add('wave')
-
-    const oldWave =
-      this.querySelector('.wave')
-
+    // Удаляем предыдущую волну
+    const oldWave = this.querySelector('.wave')
     if (oldWave) {
       oldWave.remove()
     }
 
+    const circle = document.createElement('span')
+    circle.classList.add('wave')
+
+    // Получаем размеры и позицию элемента
+    const rect = this.getBoundingClientRect()
+    const offsetX = e.clientX - rect.left
+    const offsetY = e.clientY - rect.top
+
+    // Максимальное расстояние от точки клика до угла элемента
+    const maxDist = Math.max(
+      offsetX, rect.width - offsetX,
+      offsetY, rect.height - offsetY
+    )
+    const size = maxDist * 2 // диаметр волны
+
+    circle.style.width = `${size}px`
+    circle.style.height = `${size}px`
+    circle.style.left = `${offsetX - size / 2}px`
+    circle.style.top = `${offsetY - size / 2}px`
+
     this.appendChild(circle)
-
   })
-
 })
