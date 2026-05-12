@@ -156,32 +156,31 @@ downloadButton.addEventListener('click', () => {
 
 })
 
-// ---- Исправленный ripple-эффект ----
-const rippleElements =
-  document.querySelectorAll('.ripple')
+// ---- Правильный ripple ----
+const rippleElements = document.querySelectorAll('.ripple')
 
 rippleElements.forEach((element) => {
   element.addEventListener('click', function (e) {
     // Удаляем предыдущую волну
     const oldWave = this.querySelector('.wave')
-    if (oldWave) {
-      oldWave.remove()
-    }
+    if (oldWave) oldWave.remove()
 
     const circle = document.createElement('span')
     circle.classList.add('wave')
 
-    // Получаем размеры и позицию элемента
+    // Получаем размеры и позицию элемента относительно окна
     const rect = this.getBoundingClientRect()
+
+    // Вычисляем координаты клика относительно левого верхнего угла элемента
     const offsetX = e.clientX - rect.left
     const offsetY = e.clientY - rect.top
 
-    // Максимальное расстояние от точки клика до угла элемента
+    // Радиус волны – максимальное расстояние от точки клика до любого угла элемента
     const maxDist = Math.max(
       offsetX, rect.width - offsetX,
       offsetY, rect.height - offsetY
     )
-    const size = maxDist * 2 // диаметр волны
+    const size = maxDist * 2 // диаметр
 
     circle.style.width = `${size}px`
     circle.style.height = `${size}px`
